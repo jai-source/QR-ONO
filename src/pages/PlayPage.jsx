@@ -4,6 +4,7 @@ import { supabase } from '../supabase/supabaseClient'
 import { updateScore } from '../utils/scoreUtils'
 import QuestionCard from '../components/QuestionCard'
 import AnswerButton from '../components/AnswerButton'
+import ConfessionsFeed from '../components/ConfessionsFeed'
 
 const POINTS_CORRECT = 10
 const POINTS_WRONG = -5
@@ -165,24 +166,24 @@ export default function PlayPage() {
   if (phase === 'auth') {
     return (
       <CenteredCard>
-        <div className="text-center">
-          <span className="font-orbitron text-5xl text-neon-cyan block mb-4 animate-glow-pulse">◈</span>
-          <h2 className="font-cinzel text-2xl text-white mb-3">Authentication Required</h2>
-          <p className="font-manrope text-white/50 text-sm mb-6">
-            You need to be logged in to scan QR codes and earn points.
+        <div className="text-center py-4">
+          <span className="font-orbitron text-5xl text-cyan-neon block mb-6 animate-glow-pulse drop-shadow-[0_0_15px_rgba(77,216,230,0.6)]">◈</span>
+          <h2 className="font-orbitron font-black text-xl text-white mb-4 tracking-widest uppercase">ENCRYPTED ACCESS</h2>
+          <p className="font-manrope font-bold text-white/40 text-xs mb-8 tracking-widest uppercase uppercase">
+            Identity verification required to scan void tokens.
           </p>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <button
-              className="btn-solid-cyan w-full"
+              className="btn-neon-cyan w-full py-4 text-xs tracking-[0.3em]"
               onClick={() => navigate(`/login?redirect=${encodeURIComponent(window.location.href)}`)}
             >
-              Login
+              INITIALIZE LOGIN
             </button>
             <button
-              className="btn-neon-cyan w-full"
+              className="font-manrope text-[0.65rem] font-bold text-white/30 hover:text-white transition-colors uppercase tracking-[0.4em] py-2"
               onClick={() => navigate(`/register?redirect=${encodeURIComponent(window.location.href)}`)}
             >
-              Register
+              Create Account
             </button>
           </div>
         </div>
@@ -193,21 +194,20 @@ export default function PlayPage() {
   if (phase === 'already-scanned') {
     return (
       <CenteredCard>
-        <div className="text-center">
+        <div className="text-center py-4">
           <span
-            className="font-orbitron text-5xl text-pink-neon block mb-4"
-            style={{ textShadow: '0 0 20px rgba(232,67,147,0.8)' }}
+            className="font-orbitron text-5xl text-pink-neon block mb-6 drop-shadow-[0_0_15px_rgba(232,67,147,0.6)]"
           >⊗</span>
-          <h2 className="font-cinzel text-2xl text-white mb-3">Already Scanned</h2>
-          <p className="font-manrope text-white/50 text-sm mb-6">
-            You already scanned this QR code. Each code can only be used once per hunter.
+          <h2 className="font-orbitron font-black text-xl text-white mb-4 tracking-widest uppercase">VOID TOKEN USED</h2>
+          <p className="font-manrope font-bold text-white/40 text-xs mb-8 tracking-widest uppercase">
+            This frequency has already been harvested.
           </p>
-          <div className="flex flex-col gap-3">
-            <button className="btn-neon-cyan w-full" onClick={() => navigate('/leaderboard')}>
-              View Leaderboard
+          <div className="flex flex-col gap-4">
+            <button className="btn-neon-cyan w-full py-4 text-xs tracking-[0.3em]" onClick={() => navigate('/leaderboard')}>
+              RANKINGS
             </button>
-            <button className="btn-neon-pink w-full" onClick={() => navigate('/')}>
-              Back to Home
+            <button className="font-manrope text-[0.65rem] font-bold text-white/30 hover:text-white transition-colors uppercase tracking-[0.4em] py-2" onClick={() => navigate('/')}>
+              RETURN TO HUB
             </button>
           </div>
         </div>
@@ -218,12 +218,12 @@ export default function PlayPage() {
   if (phase === 'error') {
     return (
       <CenteredCard>
-        <div className="text-center">
-          <span className="font-orbitron text-5xl text-pink-neon block mb-4">⚠</span>
-          <h2 className="font-cinzel text-2xl text-white mb-3">Error</h2>
-          <p className="font-manrope text-white/50 text-sm mb-6">{message}</p>
-          <button className="btn-neon-cyan w-full" onClick={() => navigate('/')}>
-            Back to Home
+        <div className="text-center py-4">
+          <span className="font-orbitron text-5xl text-pink-neon block mb-6 drop-shadow-[0_0_15px_rgba(232,67,147,0.6)]">⚠</span>
+          <h2 className="font-orbitron font-black text-xl text-white mb-4 tracking-widest uppercase">SYSTEM ERROR</h2>
+          <p className="font-manrope font-bold text-white/40 text-xs mb-8 tracking-widest uppercase">{message}</p>
+          <button className="btn-neon-cyan w-full py-4 text-xs tracking-[0.3em]" onClick={() => navigate('/')}>
+            RESET HUB
           </button>
         </div>
       </CenteredCard>
@@ -232,62 +232,46 @@ export default function PlayPage() {
 
   if (phase === 'result') {
     return (
-      <div className="min-h-screen px-4 pt-4 pb-10 scanline-bg">
-        <div
-          className="fixed top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full pointer-events-none"
-          style={{
-            background: isCorrect
-              ? 'radial-gradient(circle, rgba(74,222,128,0.15), transparent 70%)'
-              : 'radial-gradient(circle, rgba(232,67,147,0.15), transparent 70%)',
-            filter: 'blur(40px)',
-          }}
-        />
-        <div className="relative w-full max-w-md mx-auto animate-slide-up">
-          {/* Token badge - hidden on small screens to save space */}
-          <div className="hidden sm:inline-flex glass-card p-2 px-4 items-center gap-2 rounded-full border-white/10 mb-4">
-            <span className="font-orbitron text-xs text-white/30 truncate max-w-[200px]">
-              TOKEN: {token}
-            </span>
-          </div>
-
+      <div className="min-h-screen px-4 pt-4 pb-10 flex items-center justify-center">
+        <div className="relative w-full max-w-lg mx-auto animate-fade-in-slow">
           <div
-            className={`glass-card relative p-6 sm:p-8 text-center corner-decoration ${isCorrect ? 'border-green-400/20' : 'border-pink-neon/20'}`}
-            style={{ boxShadow: isCorrect ? '0 0 30px rgba(74,222,128,0.1)' : '0 0 30px rgba(232,67,147,0.1)' }}
+            className={`bg-black/40 backdrop-blur-2xl relative p-8 sm:p-12 text-center rounded-[2.5rem] border ${isCorrect ? 'border-green-400/20' : 'border-pink-neon/20'} shadow-2xl overflow-hidden`}
           >
-            <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            {/* Background decorative ring */}
+            <div className={`absolute top-[-20%] left-[-20%] w-[140%] h-[140%] rounded-full opacity-10 pointer-events-none ${isCorrect ? 'bg-green-400/30' : 'bg-pink-neon/30'} blur-[100px] animate-pulse`} />
 
             {/* Result icon */}
             <div
-              className="text-6xl mb-4 font-orbitron"
+              className="text-7xl mb-6 font-orbitron"
               style={isCorrect
-                ? { color: '#4ade80', textShadow: '0 0 30px rgba(74,222,128,0.8)' }
-                : { color: '#e84393', textShadow: '0 0 30px rgba(232,67,147,0.8)' }}
+                ? { color: '#4ade80', filter: 'drop-shadow(0 0 20px rgba(74,222,128,0.6))' }
+                : { color: '#e84393', filter: 'drop-shadow(0 0 20px rgba(232,67,147,0.6))' }}
             >
               {isCorrect ? '✓' : '✗'}
             </div>
 
-            <h2 className="font-cinzel text-2xl text-white mb-2">
-              {isCorrect ? 'Correct!' : 'Wrong Answer'}
+            <h2 className="font-orbitron font-black text-2xl sm:text-3xl text-white mb-4 tracking-widest uppercase italic">
+              {isCorrect ? 'SYNCHRONIZED' : 'DESYNCED'}
             </h2>
 
             {/* Score delta */}
-            <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="flex flex-col items-center justify-center mb-10">
               <span
-                className="font-orbitron text-3xl font-bold"
+                className="font-orbitron text-5xl font-black italic"
                 style={isCorrect
-                  ? { color: '#4ade80', textShadow: '0 0 15px rgba(74,222,128,0.6)' }
-                  : { color: '#e84393', textShadow: '0 0 15px rgba(232,67,147,0.6)' }}
+                  ? { color: '#4ade80', filter: 'drop-shadow(0 0 10px rgba(74,222,128,0.4))' }
+                  : { color: '#e84393', filter: 'drop-shadow(0 0 10px rgba(232,67,147,0.4))' }}
               >
                 {scoreChange > 0 ? `+${scoreChange}` : scoreChange}
               </span>
-              <span className="font-manrope text-white/40 text-sm">points</span>
+              <span className="font-manrope font-bold text-white/30 text-[0.6rem] uppercase tracking-[0.5em] mt-2">Points Harvested</span>
             </div>
 
             {/* Reveal correct answer when wrong */}
             {!isCorrect && question && (
-              <div className="mb-4 px-4 py-3 rounded-lg border border-green-400/20 bg-green-400/5 text-left">
-                <p className="font-manrope text-xs text-white/40 mb-1 uppercase tracking-widest">Correct Answer</p>
-                <p className="font-manrope text-sm text-green-300">
+              <div className="mb-10 px-6 py-4 rounded-2xl border border-green-400/10 bg-green-400/5 text-center">
+                <p className="font-orbitron text-[0.55rem] font-bold text-white/30 mb-2 uppercase tracking-[0.2em]">Validated Protocol</p>
+                <p className="font-orbitron font-bold text-sm text-green-300 tracking-wider">
                   {OPTION_LABELS[question.correct]}. {question.options[question.correct]}
                 </p>
               </div>
@@ -295,23 +279,60 @@ export default function PlayPage() {
 
             {/* Total score */}
             {newScore !== null && (
-              <div className="mb-6 px-4 py-3 rounded-lg border border-cyan-neon/20 bg-cyan-neon/5">
-                <p className="font-manrope text-xs text-white/40 uppercase tracking-widest mb-1">Total Score</p>
+              <div className="mb-10 p-6 rounded-2xl border border-cyan-neon/10 bg-cyan-neon/5">
+                <p className="font-orbitron text-[0.55rem] font-bold text-white/20 uppercase tracking-[0.5em] mb-2">Current Magnitude</p>
                 <p
-                  className="font-orbitron text-2xl text-cyan-neon"
-                  style={{ textShadow: '0 0 10px rgba(77,216,230,0.5)' }}
+                  className="font-orbitron font-black text-3xl text-cyan-neon italic"
+                  style={{ filter: 'drop-shadow(0 0 8px rgba(77,216,230,0.4))' }}
                 >
-                  {newScore} pts
+                  {newScore} <span className="text-xs italic tracking-widest text-white/40 ml-1">PTS</span>
                 </p>
               </div>
             )}
 
+            {/* Confession Unlock Notice */}
+            {isCorrect && (
+              <div className="mb-10 p-2 rounded-3xl border border-pink-neon/20 bg-pink-neon/[0.02] group">
+                <div className="p-6 rounded-[1.4rem] bg-pink-neon/5 flex flex-col items-center gap-4 transition-all duration-500 group-hover:bg-pink-neon/10">
+                  <div className="w-10 h-10 rounded-full bg-pink-neon/20 flex items-center justify-center text-xl animate-bounce">🍵</div>
+                  <div className="text-center">
+                    <p className="font-orbitron font-black text-xs text-pink-neon tracking-widest">SPILL PASS EARNED</p>
+                    <p className="font-manrope font-bold text-[0.6rem] text-white/40 uppercase tracking-widest mt-1">Void confession protocol active.</p>
+                  </div>
+                  <button
+                    className="w-full bg-pink-neon text-white font-orbitron font-black text-[0.65rem] tracking-[0.2em] py-4 rounded-xl hover:shadow-[0_0_25px_rgba(232,67,147,0.5)] transition-all uppercase"
+                    onClick={() => navigate('/confessions')}
+                  >
+                    DISCHARGE TEA →
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="flex flex-col gap-3">
-              <button className="btn-neon-cyan w-full" onClick={() => navigate('/leaderboard')}>
-                View Leaderboard
+              <button className="btn-neon-cyan w-full py-4 text-xs tracking-[0.3em]" onClick={() => navigate('/leaderboard')}>
+                RANKINGS
               </button>
-              <button className="btn-neon-pink w-full" onClick={() => navigate('/')}>
-                Back to Home
+              <button className="font-manrope text-[0.65rem] font-bold text-white/30 hover:text-white transition-colors uppercase tracking-[0.4em] py-2" onClick={() => navigate('/')}>
+                RETURN TO HUB
+              </button>
+            </div>
+          </div>
+
+          {/* Social Sneak Peek - Shows recent confessions directly on the results page */}
+          <div className="mt-12 w-full max-w-lg mx-auto pb-10">
+            <div className="text-center mb-8">
+              <span className="font-orbitron font-black text-[0.6rem] text-cyan-neon tracking-[0.5em] uppercase px-4 py-2 border border-cyan-neon/20 rounded-full bg-cyan-neon/5">
+                VOID ACTIVITY
+              </span>
+            </div>
+            <div className="bg-black/20 backdrop-blur-xl rounded-[2rem] border border-white/5 p-4">
+              <ConfessionsFeed limit={3} showHeader={false} compact={true} />
+              <button
+                onClick={() => navigate('/confessions')}
+                className="w-full mt-4 py-4 font-orbitron font-bold text-[0.6rem] text-white/20 hover:text-white/60 transition-colors uppercase tracking-[0.3em]"
+              >
+                View All Transmissions →
               </button>
             </div>
           </div>
@@ -399,7 +420,7 @@ function LoadingScreen({ text }) {
 function CenteredCard({ children }) {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 scanline-bg">
-        <div className="glass-card-cyan relative p-6 sm:p-8 max-w-md w-full corner-decoration animate-slide-up">
+      <div className="glass-card-cyan relative p-6 sm:p-8 max-w-md w-full corner-decoration animate-slide-up">
         <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-cyan-neon/50 to-transparent" />
         {children}
         <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-pink-neon/30 to-transparent" />

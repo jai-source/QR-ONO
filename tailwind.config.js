@@ -25,10 +25,14 @@ export default {
           blue: '#1e3a8a',
           glow: 'rgba(255, 255, 255, 0.1)',
         },
+        'cyan-neon': '#4dd8e6',
+        'pink-neon': '#e84393',
       },
       boxShadow: {
         'starlight': '0 0 15px rgba(255,255,255,0.1), 0 0 30px rgba(255,255,255,0.05)',
         'glass': '0 8px 32px rgba(0,0,0,0.4)',
+        'neon-cyan': '0 0 20px rgba(77, 216, 230, 0.6)',
+        'neon-pink': '0 0 20px rgba(232, 67, 147, 0.6)',
       },
       animation: {
         'glow-pulse': 'glowPulse 4s ease-in-out infinite',

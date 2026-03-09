@@ -1,27 +1,30 @@
 export default function QuestionCard({ question, children }) {
   return (
-    <div className="glass-card-cyan relative p-5 sm:p-8 animate-slide-up corner-decoration">
+    <div className="bg-black/40 backdrop-blur-xl border border-white/10 relative p-6 sm:p-10 animate-slide-up rounded-[2rem] shadow-2xl overflow-hidden">
+      {/* Decorative inner glow */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-neon/5 to-transparent pointer-events-none" />
+
       {/* Top accent line */}
-      <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-cyan-neon/50 to-transparent" />
+      <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-cyan-neon/40 to-transparent" />
 
       {/* Question label */}
-      <div className="flex items-center gap-2 mb-5">
-        <div className="w-2 h-2 rounded-full bg-pink-neon" style={{ boxShadow: '0 0 6px #e84393' }} />
-        <span className="font-orbitron text-xs tracking-[0.2em] text-white/40 uppercase">Question</span>
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-2 h-2 rounded-full bg-pink-neon shadow-[0_0_10px_#e84393]" />
+        <span className="font-orbitron font-bold text-[0.65rem] tracking-[0.3em] text-white/40 uppercase">DATA COMMAND</span>
       </div>
 
       {/* Question text */}
-      <p className="font-cinzel text-base sm:text-xl text-white leading-relaxed mb-6">
+      <h2 className="font-orbitron font-black text-xl sm:text-2xl text-white leading-tight mb-10 tracking-tight">
         {question}
-      </p>
+      </h2>
 
       {/* Answer options slot */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4 relative z-10">
         {children}
       </div>
 
       {/* Bottom accent */}
-      <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-pink-neon/30 to-transparent" />
+      <div className="absolute bottom-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-pink-neon/20 to-transparent" />
     </div>
   )
 }

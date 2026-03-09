@@ -2,28 +2,7 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabase/supabaseClient'
 import { getUserScore } from '../utils/scoreUtils'
-
-const QRLogo = () => (
-  <div
-    className="w-20 h-20 border-2 border-cyan-neon/60 rounded-2xl flex items-center justify-center animate-float mx-auto mb-5"
-    style={{ boxShadow: '0 0 30px rgba(77,216,230,0.4), inset 0 0 20px rgba(77,216,230,0.05)' }}
-  >
-    <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-      <rect x="2" y="2" width="16" height="16" rx="2" stroke="#4dd8e6" strokeWidth="2" />
-      <rect x="26" y="2" width="16" height="16" rx="2" stroke="#4dd8e6" strokeWidth="2" />
-      <rect x="2" y="26" width="16" height="16" rx="2" stroke="#4dd8e6" strokeWidth="2" />
-      <rect x="6" y="6" width="8" height="8" rx="1" fill="#4dd8e6" />
-      <rect x="30" y="6" width="8" height="8" rx="1" fill="#4dd8e6" />
-      <rect x="6" y="30" width="8" height="8" rx="1" fill="#4dd8e6" />
-      <rect x="26" y="26" width="5" height="5" fill="#e84393" />
-      <rect x="33" y="26" width="5" height="5" fill="#e84393" />
-      <rect x="26" y="33" width="5" height="5" fill="#e84393" />
-      <rect x="33" y="33" width="5" height="5" fill="#4dd8e6" />
-      <rect x="39" y="26" width="3" height="3" fill="#4dd8e6" />
-      <rect x="26" y="39" width="3" height="3" fill="#4dd8e6" />
-    </svg>
-  </div>
-)
+import ConfessionsFeed from '../components/ConfessionsFeed'
 
 export default function HomePage() {
   const [user, setUser] = useState(undefined)
@@ -54,132 +33,100 @@ export default function HomePage() {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-center px-8 md:px-24 overflow-hidden pt-20">
+    <div className="relative min-h-screen flex flex-col items-center px-4 md:px-24 overflow-x-hidden pt-32 pb-24">
 
       {/* Top Left Small Header */}
-      <div className="absolute top-24 left-8 md:left-24 text-[9px] tracking-[0.4em] text-white/40 uppercase font-inter flex items-center gap-2">
+      <div className="absolute top-24 left-8 md:left-24 text-[9px] tracking-[0.4em] text-white/40 uppercase font-orbitron flex items-center gap-2">
         <span>ORIGINS' MMXXIV</span>
       </div>
 
       {/* Main Content Area - Centered */}
-      <div className="relative z-10 w-full max-w-sm mx-auto text-center flex flex-col items-center animate-fade-in-slow">
-
-        <h1 className="font-cinzel text-5xl md:text-6xl tracking-[0.1em] mb-2 font-bold"
-          style={{ color: '#ffffff', textShadow: '0 4px 20px rgba(0,0,0,0.8), 0 0 40px rgba(255,255,255,0.4)' }}>
-          Onerios-Quests
+      <div className="relative z-10 w-full max-w-sm mx-auto text-center flex flex-col items-center animate-fade-in-slow mb-32">
+        <h1 className="font-orbitron text-5xl md:text-6xl tracking-tight mb-2 font-black italic uppercase leading-none text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+          ONERIOS
         </h1>
-        <p className="font-inter text-[10px] tracking-[0.4em] text-white/40 uppercase mb-12">
-          Scan. Answer. Conquer.
+        <p className="font-orbitron text-[10px] tracking-[0.5em] text-white/40 uppercase mb-12 ml-2">
+          VOID PROTOCOL ACTIVE
         </p>
 
         {user ? (
           /* LOGGED IN VIEW */
           <div className="flex flex-col items-center gap-5 w-full">
             {/* Score badge */}
-            <div className="glass-card-celestial px-8 py-5 rounded-2xl w-full">
-              <p className="font-inter text-[10px] tracking-[0.3em] text-white/40 uppercase mb-1">Your Points</p>
-              <p className="font-space font-light text-5xl text-white">{score}</p>
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 px-8 py-5 rounded-[2rem] w-full relative group">
+              <div className="absolute inset-0 border border-cyan-neon/20 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity" />
+              <p className="font-manrope font-bold text-[10px] tracking-[0.3em] text-white/30 uppercase mb-1">Magnitude</p>
+              <p className="font-orbitron font-black italic text-5xl text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                {score} <span className="text-sm italic text-white/20">PTS</span>
+              </p>
             </div>
 
             <Link to="/scan" className="w-full">
-              <button className="w-full bg-white text-black font-inter text-sm tracking-[0.2em] font-medium py-4 rounded-xl hover:bg-white/90 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+              <button className="btn-neon-cyan w-full py-5 text-xs tracking-[0.3em]">
                 OPEN SCANNER
               </button>
             </Link>
 
             <Link to="/leaderboard" className="w-full">
-              <div className="glass-card-celestial px-8 py-4 rounded-2xl w-full hover:bg-white/5 transition-colors flex items-center justify-center">
-                <span className="text-xs tracking-[0.2em] uppercase text-white hover:text-white transition-colors">
-                  Access Leaderboard
-                </span>
-              </div>
+              <button className="w-full font-manrope font-bold text-[0.65rem] text-white/30 hover:text-white transition-all uppercase tracking-[0.4em] py-4">
+                Global Rankings
+              </button>
             </Link>
           </div>
         ) : (
           /* LOGGED OUT VIEW */
           <div className="flex flex-col gap-4 w-full">
             <Link to="/register" className="w-full">
-              <button className="w-full bg-white text-black font-inter text-sm tracking-[0.2em] font-medium py-4 rounded-xl hover:bg-white/90 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                REGISTER
+              <button className="btn-neon-cyan w-full py-5 text-xs tracking-[0.3em]">
+                INITIALIZE ACCESS
               </button>
             </Link>
 
             <Link to="/login" className="w-full">
-              <button className="w-full glass-card-celestial text-white font-inter text-sm tracking-[0.2em] font-medium py-4 rounded-xl hover:bg-white/10 transition-colors">
-                LOGIN
+              <button className="w-full font-manrope font-bold text-[0.65rem] text-white/30 hover:text-white transition-all uppercase tracking-[0.4em] py-4">
+                EXISTING ENTITY LOGIN
               </button>
             </Link>
           </div>
         )}
       </div>
 
-      {/* Bottom Grid Overlay */}
-      <div className="absolute bottom-12 left-8 md:left-24 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 w-full max-w-4xl opacity-80 animate-fade-in" style={{ animationDelay: '0.5s', animationFillMode: 'both' }}>
-
-        {/* Stat 1 */}
-        <div className="flex flex-col gap-2 border-l border-white/10 pl-4 py-1">
-          <div className="text-white/30 mb-1">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-              <circle cx="12" cy="12" r="10" />
-              <circle cx="12" cy="12" r="4" />
-            </svg>
-          </div>
-          {user ? (
-            <span className="font-space font-light text-3xl">{score}</span>
-          ) : (
-            <span className="font-space font-light text-3xl">10,000</span>
-          )}
-          <span className="font-inter text-[8px] tracking-[0.3em] uppercase text-white/40">
-            {user ? 'YOUR POINTS' : 'ENTITIES TRACKED'}
-          </span>
+      {/* Home Feed Section */}
+      <div className="w-full max-w-4xl mx-auto mt-16 relative z-10">
+        <div className="flex flex-col items-center mb-12">
+          <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-neon to-transparent mb-6 opacity-30" />
+          <h2 className="font-orbitron font-black text-[0.7rem] text-white tracking-[0.6em] uppercase text-center mb-2">
+            Void Origins Transmissions
+          </h2>
+          <p className="font-manrope font-bold text-[0.55rem] text-white/20 uppercase tracking-[0.4em]">Live Anonymous Feed</p>
         </div>
 
-        {/* Stat 2 */}
-        <div className="flex flex-col gap-2 border-l border-white/10 pl-4 py-1">
-          <div className="text-white/30 mb-1">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <path d="M3 12h18M12 3v18" />
-            </svg>
-          </div>
-          <span className="font-space font-light text-3xl">50+</span>
-          <span className="font-inter text-[8px] tracking-[0.3em] uppercase text-white/40">
-            PULSES RECORDED
-          </span>
-        </div>
+        <div className="bg-black/20 backdrop-blur-3xl border border-white/5 rounded-[3rem] overflow-hidden shadow-2xl">
+          <ConfessionsFeed limit={5} showHeader={false} />
 
-        {/* Stat 3 */}
-        <div className="flex flex-col gap-2 border-l border-white/10 pl-4 py-1">
-          <div className="text-white/30 mb-1">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
+          <div className="p-8 border-t border-white/5 text-center">
+            <Link to="/confessions">
+              <button className="font-orbitron font-black text-[0.65rem] text-cyan-neon/40 hover:text-cyan-neon transition-all tracking-[0.4em] uppercase">
+                ENTER THE TEA SPACE →
+              </button>
+            </Link>
           </div>
-          <span className="font-space font-light text-3xl">15</span>
-          <span className="font-inter text-[8px] tracking-[0.3em] uppercase text-white/40">
-            NODES CONNECTED
-          </span>
         </div>
-
-        {/* Stat 4 */}
-        <div className="flex flex-col gap-2 border-l border-white/10 pl-4 py-1">
-          <div className="text-white/30 mb-1">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </svg>
-          </div>
-          <span className="font-space font-light text-3xl">24h</span>
-          <span className="font-inter text-[8px] tracking-[0.3em] uppercase text-white/40">
-            CONSTANT FLOW
-          </span>
-        </div>
-
       </div>
 
-      {/* Bottom Footer Text */}
-      <div className="absolute bottom-6 left-8 md:left-24 text-[8px] tracking-[0.3em] text-white/20 uppercase font-inter hidden md:block">
-        © MMXXIV ONERIOS FLOW. QUIETUDE IN CHAOS.
+      {/* Stats Section - Reduced visibility on Home for focus */}
+      <div className="w-full max-w-4xl mx-auto mt-32 grid grid-cols-2 md:grid-cols-4 gap-8 opacity-40 hover:opacity-100 transition-opacity duration-700 pb-20">
+        {[
+          { label: 'Entities', value: user ? score : '14K+', sub: 'Tracked' },
+          { label: 'Pulses', value: '890', sub: 'Detected' },
+          { label: 'Nodes', value: '15', sub: 'Synced' },
+          { label: 'Status', value: '24h', sub: 'Optimal' },
+        ].map((stat, i) => (
+          <div key={i} className="flex flex-col gap-1 border-l border-white/10 pl-6 py-2">
+            <span className="font-orbitron font-black text-2xl text-white tracking-tighter italic">{stat.value}</span>
+            <span className="font-manrope font-bold text-[0.55rem] tracking-[0.3em] uppercase text-white/30">{stat.label}</span>
+          </div>
+        ))}
       </div>
 
     </div>

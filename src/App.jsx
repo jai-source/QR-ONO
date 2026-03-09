@@ -7,6 +7,8 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import PlayPage from './pages/PlayPage'
 import Leaderboard from './pages/Leaderboard'
+import ConfessionsPage from './pages/ConfessionsPage'
+import ConfessionsToast from './components/ConfessionsToast'
 
 // Lazy-load ScanPage so html5-qrcode is only downloaded when the user goes to /scan
 const ScanPage = lazy(() => import('./pages/ScanPage'))
@@ -37,8 +39,33 @@ function ProtectedRoute({ children }) {
 }
 
 export default function App() {
+  const [newConfession, setNewConfession] = useState(null)
+
+  useEffect(() => {
+    // Listen for global confessions to show real-time toast
+    const channel = supabase
+      .channel('global:confessions_toast')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'confessions' }, payload => {
+        // Only show toast if window is active to avoid spamming background users
+        if (document.visibilityState === 'visible') {
+          setNewConfession(payload.new)
+        }
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [])
+
   return (
     <BrowserRouter>
+      {newConfession && (
+        <ConfessionsToast
+          confession={newConfession}
+          onClose={() => setNewConfession(null)}
+        />
+      )}
       <Navbar />
       <main className="pt-14">
         <Suspense fallback={
@@ -50,15 +77,16 @@ export default function App() {
           </div>
         }>
           <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          {/* /play is accessible without auth — PlayPage handles auth redirect internally */}
-          <Route path="/play" element={<PlayPage />} />
-          <Route path="/scan" element={<ScanPage />} />
-          {/* Catch-all */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/confessions" element={<ConfessionsPage />} />
+            {/* /play is accessible without auth — PlayPage handles auth redirect internally */}
+            <Route path="/play" element={<PlayPage />} />
+            <Route path="/scan" element={<ScanPage />} />
+            {/* Catch-all */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
       </main>
