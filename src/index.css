@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #000;
+    background-image: url('/celestial_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* Overlay to ensure text readability against the vivid nebula */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+
+  /* Minimalist Glassmorphism for forms */
+  .glass-card-celestial {
+    @apply bg-black/20 backdrop-blur-md border border-white/10 rounded-xl;
+  }
+
+  .btn-neon-cyan {
+    @apply bg-cyan-neon text-black font-orbitron font-bold text-xs tracking-widest px-8 py-3 rounded transition-all uppercase;
+  }
+
+  .btn-neon-cyan:hover {
+    box-shadow: 0 0 20px rgba(77, 216, 230, 0.6);
+  }
+
+  .btn-neon-pink {
+    @apply bg-pink-neon text-white font-orbitron font-bold text-xs tracking-widest px-8 py-3 rounded transition-all uppercase;
+  }
+
+  .btn-neon-pink:hover {
+    box-shadow: 0 0 20px rgba(232, 67, 147, 0.6);
+  }
+
+  /* Sleek minimalist text buttons */
+  .btn-text-ghost {
+    @apply flex items-center gap-4 text-xs tracking-[0.3em] uppercase text-white/50 hover:text-white transition-colors duration-500 cursor-pointer;
+  }
+
+  /* Thin minimalist borders for form inputs */
+  .input-celestial {
+    @apply w-full px-0 py-3 bg-transparent border-b border-white/20 text-white outline-none font-inter font-light text-sm transition-colors duration-500 rounded-none;
+  }
+
+  @keyframes shrink-width {
+    from {
+      transform: scaleX(1);
+    }
+
+    to {
+      transform: scaleX(0);
+    }
+  }
+
+  .animate-shrink-width {
+    animation: shrink-width linear forwards;
+  }
+
+  .input-celestial::placeholder {
+    @apply text-white/30 tracking-wide;
+  }
+
+  .input-celestial:focus {
+    @apply border-white/80;
+  }
+}
